@@ -1,0 +1,7 @@
+export const SET_LAYOUT = 'SET_LAYOUT';
+export const TOGGLE_IS_LOADING = 'SET_IS_LOADING';
+export const SET_SELECTED_TAB = 'SET_SELECTED_TAB';
+export const SET_PLACE_INFO = 'SET_PLACE_INFO'
+export const ADD_PLACE = 'ADD_PLACE'
+export const LOAD_LOCAL_INFO = "LOAD_LOCAL_INFO"
+export const SET_SELECTED_ICON = "SET_SELECTED_ICON"
