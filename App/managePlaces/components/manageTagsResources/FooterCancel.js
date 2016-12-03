@@ -5,23 +5,31 @@ import {
 	Text,
 	Image,
 	StyleSheet,
-	TouchableHighlight
+	TouchableOpacity
 } from 'react-native';
 
 const FooterCancel = ({ handlePress }) => {
 
 	return (
-		<TouchableHighlight
-			onPress={handlePress}>
+		<TouchableOpacity
+			onPress={handlePress}
+			style={styles.container}>
 			<Text style={styles.Text}>Cancel</Text>
-		</TouchableHighlight>
+		</TouchableOpacity>
 	)
 }
 
 export default FooterCancel;
 
 var styles = StyleSheet.create({
+	container: {
+		height: 50,
+		width: 60,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
 	text: {
 		fontSize: 12,
+		textAlign: 'center',
 	},
 })
