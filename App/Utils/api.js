@@ -4,20 +4,31 @@ import {
 } 
 from 'react-native';
 
+
+import Firestack from 'react-native-firestack'
 import firebase from 'firebase';
 import Qs from 'qs';
 
 var config = {
-    apiKey: "AIzaSyB_H75q3ErIQrdrWMHngw_YrbzifXHWTL4",
-    authDomain: "satisfy-ae0ef.firebaseapp.com",
-    databaseURL: "https://satisfy-ae0ef.firebaseio.com",
-    storageBucket: "satisfy-ae0ef.appspot.com",
-    messagingSenderId: "810248671987"
+    apiKey: "AIzaSyDXQSzQZaky0nlx9DCwcNm9c7XWXbn9Co8",
+    authDomain: "atdaa-5ad3a.firebaseapp.com",
+    databaseURL: "https://atdaa-5ad3a.firebaseio.com/",
+    storageBucket: "atdaa-5ad3a.appspot.com",
   };
 
-var googleAPI = "AIzaSyDB5joq7sdR3vnzKOWAkL7xvN64tIhx9wk";
+var googleAPI = "AIzaSyChab7O6hfps-mXbk-DDtsdThWongFboZA";
 
 firebase.initializeApp(config);
+
+var database = firebase.database();
+
+var provider = new firebase.auth.FacebookAuthProvider();
+
+var firestackConfig = {
+	debug: true
+}
+const firestack = new Firestack(firestackConfig);
+firestack.on('debug', msg => console.log('Received debug message', msg))
 
 var api = {
 
@@ -45,20 +56,35 @@ var api = {
 	},
 
 
-	//Firebase API calls
+	//Firestack API calls
 	createUser(email,password) {
-		return firebase.auth().createUserWithEmailAndPassword(email,password)		
+		return firestack.auth.createUserWithEmail(email,password)
+	},
+
+	getUser() {
+		firestack.auth.listenForAuth( (evt) => {
+			if (!evt.authenticated) {
+				console.log("There is no user")
+			} else {
+				console.log("User details", evt.user);
+			}
+		})
+		.then(() => console.log('Listening for authentication changes'))
 	},
 
 	signIn(email, password) {
-		return firebase.auth().signInWithEmailAndPassword(email, password);
+		return firestack.auth.signInWithEmail(email, password)
+	},
+
+	signInFacebook(token) {
+		return firestack.auth.signInWithProvider('facebook', token, '')
 	},
 
 	//Async Data calls
 
-	async getLocalUserInfo(userId) {
+	async getLocalUserInfo() {
 		try {
-			var userInfo = JSON.parse(await AsyncStorage.getItem(userId));
+			var userInfo = JSON.parse(await AsyncStorage.getItem('userInfo'));
 			//Use below to clear local data
 			//var userInfo = {};
 			if (Object.keys(userInfo).length !== 0) {
@@ -66,40 +92,38 @@ var api = {
 				return userInfo
 			} else {
 				console.log("No local userInfo on disk")
-				await AsyncStorage.setItem(userId, JSON.stringify({}))
 				return null
 				}
-			}
+		}
 		catch (error) {
 			console.log("Error trying to read local userInfo", error);
 		}
 	},
 
-	async setLocalUserInfo(userId, userInfo) {
+	async setLocalUserInfo(userInfo) {
 		try {
-		  await AsyncStorage.setItem(userId, userInfo);
+		  await AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
 		  console.log("Local UserInfo Successfully Updated");
 		} catch (error) {
 		  console.log("Unable to set local user info:", error);
 		}
 	},
 
-	async updateLocalToolbar(userId, toolbar) {
+	async updateLocalToolbar(toolbar) {
 		var delta = {
 			toolbar: {
 				toolbarIcons: toolbar 
 			}
 		}
 		try {
-			await AsyncStorage.mergeItem(userId, JSON.stringify(delta))
+			await AsyncStorage.mergeItem('userInfo', JSON.stringify(delta))
 			console.log("Local toolbar updated successfully");
 		} catch (error) {
 		  console.log("Unable to update local user toolbar:", error);
 		}
 	},
 
-	async updateLocalMyPlaces(userId, currentPlaces, newPlace) {
-		var currentTime = new Date().getTime() / 1000;
+	async updateLocalMyPlaces(currentPlaces, newPlace, currentTime) {
 		var id = newPlace.place_id;
 		const placeIds = currentPlaces.placeIds.indexOf(id) === -1 ?
 			[...currentPlaces.placeIds, id] :
@@ -113,7 +137,7 @@ var api = {
 		}
 		console.log("value of delta from updateLocalMyPlaces", delta);
 		try {
-			await AsyncStorage.mergeItem(userId, JSON.stringify(delta))
+			await AsyncStorage.mergeItem('userInfo', JSON.stringify(delta))
 			console.log("Local map updated successfully");
 		} catch (error) {
 		  console.log("Unable to update local user map:", error);

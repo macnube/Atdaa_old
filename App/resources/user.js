@@ -1,8 +1,10 @@
 const user = {
-	paul: {
+	userId: {
+		userId: userId,
+		lastUpdated: lastUpdated,
 		name: 'Paul McCloud',
 		email: 'paul.mccloud@gmail.com',
-		myMarkers: {
+		myPlaces: {
 			"ChIJp1wLCO-1vJURuJe2F4Vb4B0": {
 				latlng: {
 					lat: -34.5884934,

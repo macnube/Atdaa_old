@@ -38,10 +38,11 @@ class IconSearchContainer extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		console.log("NextProps are", nextProps);
-		if (!this.state.categoryIcon) {
+		if (!this.state.categoryIcon || nextProps.iconSelected.id === 'empty') {
 			const data = this._getData(nextProps.toolbar)
 			this.setState({
-				dataSource: this.ds.cloneWithRows(data)
+				dataSource: this.ds.cloneWithRows(data),
+				categoryIcon: null
 			})
 		}
 	}

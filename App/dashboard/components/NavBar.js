@@ -28,7 +28,7 @@ const NavBar = ({ selectedTab, setSelectedTab, layoutInfo, isVisible }) => {
 			<NavBarIcon
 				imageURI="listView"
 				selected={selectedTab === "iconSearch"}
-				onPress={ () => setSelectedTab("iconSearch")} />
+				onPress={ () => console.log("Doing nothing")} />
 		</View>
 	)
 }

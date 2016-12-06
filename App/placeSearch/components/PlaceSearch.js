@@ -3,7 +3,8 @@ import React, { Component} from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import helpers from '../../Utils/helpers';
 
-const googleAPI = "AIzaSyDB5joq7sdR3vnzKOWAkL7xvN64tIhx9wk";
+const googleAPI = "AIzaSyChab7O6hfps-mXbk-DDtsdThWongFboZA";
+
 
 
 const PlaceSearch = (props) => {

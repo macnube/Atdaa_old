@@ -49,7 +49,7 @@ function updatePlace(state, place) {
 export function myPlacesById(state = {}, action) {
 	switch (action.type) {
 		case types.UPDATE_PLACE: return updatePlace(state, action.place);
-		case types.LOAD_LOCAL_INFO: return readLocalPlaces(state, action.userInfo);
+		case types.SET_USER_INFO: return readLocalPlaces(state, action.info);
 		case types.ADD_PLACE: return updateObject(state, createPlace(action.place))
 		default: return state;
 	}
@@ -57,7 +57,7 @@ export function myPlacesById(state = {}, action) {
 
 export function placeIds(state = [], action) {
 	switch (action.type) {
-		case types.LOAD_LOCAL_INFO: return readLocalPlaceIds(state, action.userInfo);
+		case types.SET_USER_INFO: return readLocalPlaceIds(state, action.info);
 		case types.ADD_PLACE: return updatePlaceIds(state, getPlaceId(action.place));
 		default: return state;
 	}
@@ -65,8 +65,8 @@ export function placeIds(state = [], action) {
 
 export function lastUpdated(state = null, action) {
 	switch (action.type) {
-		case types.LOAD_LOCAL_INFO: return readLocalLastUpdated(state, action.userInfo);
-		case types.ADD_PLACE: return getCurrent();
+		case types.SET_USER_INFO: return readLocalLastUpdated(state, action.info);
+		case types.ADD_PLACE: return action.time;
 		default: return state;
 	}
 }

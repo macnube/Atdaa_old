@@ -2,11 +2,14 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import AppContainer from './AppContainer';
 import dashboard from '../dashboard'
+import login from '../login'
 import {
 	NavigatorIOS, 
 } from 'react-native';
 
 const { DashboardContainer } = dashboard
+const { SplashContainer } = login
+
 
 const Root = ({ store }) => {
 	console.log("this is store", store.getState());
@@ -16,7 +19,7 @@ const Root = ({ store }) => {
 				style={{flex: 1}}
 	      initialRoute={{
 	        title: "SatisFI",
-	        component: DashboardContainer,
+	        component: SplashContainer,
 	        
 	      }}
 	      navigationBarHidden={true} 

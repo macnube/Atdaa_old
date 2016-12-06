@@ -3,6 +3,8 @@ import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import rootReducer from './App/rootReducer'
 
+import Firestack from 'react-native-firestack'
+
 
 const loggerMiddleware = createLogger({ predicate: (getState, action) => __DEV__});
 

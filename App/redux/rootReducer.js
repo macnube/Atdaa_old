@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
-import dashboard from './dashboard';
-import toolbar from './toolbar';
-import searchButton from './searchButton';
-import iconSearch from './iconSearch';
-import placeSearch from './placeSearch';
-import managePlaces from './managePlaces';
-import login from './login'
+import dashboard from '../dashboard';
+import toolbar from '../toolbar';
+import searchButton from '../searchButton';
+import iconSearch from '../iconSearch';
+import placeSearch from '../placeSearch';
+import managePlaces from '../managePlaces';
+import login from '../login'
 
 export default combineReducers({
 	[dashboard.constants.NAME]: dashboard.reducer,

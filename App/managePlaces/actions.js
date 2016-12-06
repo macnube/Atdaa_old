@@ -1,15 +1,17 @@
 import * as types from './actionTypes'
 
-export function addPlace(place) {
+export function addPlace(place, time) {
 	return {
 		type: types.ADD_PLACE,
-		place
+		place,
+		time
 	}
 }
 
-export function updatePlace(place) {
+export function updatePlace(place, time) {
 	return {
 		type: types.UPDATE_PLACE,
-		place
+		place,
+		time
 	}
 }

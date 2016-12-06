@@ -6,7 +6,6 @@ import api from '../Utils/api'
 
 const initialToolbarIds = ['empty', 'empty', 'empty', 'empty', 'openButton']
 const initialToolbar = getToolbarFromIds(initialToolbarIds)
-const userId = "SVNn7krFgqdsUw2g9OGK48Vgy0s2"
 
 
 /*
@@ -67,7 +66,7 @@ function updateToolbarIcon(toolbar, id, index) {
 		}
 	})
 	if (id !== 'trash' && id !== 'openButton') {
-		api.updateLocalToolbar(userId, newToolbar)
+		api.updateLocalToolbar(newToolbar)
 	}
 	return newToolbar
 }
@@ -99,7 +98,7 @@ function handleTabChange(state, tab) {
 
 function toolbarIcons(state = initialToolbar, action) {
 	switch (action.type) {
-		case types.LOAD_LOCAL_INFO: return readLocalInfo(state, action.userInfo);
+		case types.SET_USER_INFO: return readLocalInfo(state, action.info);
 		case types.DELETE_TOOLBAR_ICON: return deleteToolbarIcon(state, action.index);
 		case types.UPDATE_TOOLBAR_ICON: return updateToolbarIcon(state, action.iconId, action.index);
 		case types.SWITCH_TOOLBAR_ICONS: return switchToolbarIcons(state, action.indexOne, action.indexTwo);

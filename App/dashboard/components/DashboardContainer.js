@@ -25,18 +25,6 @@ import { getLayout } from '../../Utils/helpers';
 
 class DashboardContainer extends Component {
 
-	componentDidMount() {
-		//To DO read userId from login
-		const userId = "SVNn7krFgqdsUw2g9OGK48Vgy0s2"
-		api.getLocalUserInfo(userId)
-		.then( (userData) => {
-			if (userData) {
-				this.props.loadLocalInfo(userData);
-			}
-			
-		})
-	}
-
 	handleLayout() {
 		this.props.setLayout(getLayout());
 	}

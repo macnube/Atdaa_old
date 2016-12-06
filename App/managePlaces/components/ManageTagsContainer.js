@@ -31,15 +31,15 @@ class ManageTagsContainer extends Component {
 	}
 
 	handleAddPlace() {
-		const userId = "SVNn7krFgqdsUw2g9OGK48Vgy0s2"
 		const newPlace = {
 			...this.props.placeInfo, 
 			isNew: false,
 			primaryIcon: helpers.getPrimaryIcon(this.state.selectedTags),
 			tags: this.state.selectedTags
 		}
-		api.updateLocalMyPlaces(userId, this.props.myPlaces, newPlace)
-		this.props.addPlace(newPlace)
+		const currentTime = new Date().getTime() / 1000
+		api.updateLocalMyPlaces(this.props.myPlaces, newPlace, currentTime)
+		this.props.addPlace(newPlace, currentTime)
 	}
 
 	handleBackToCategory() {
@@ -115,8 +115,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		addPlace(place) {
-			dispatch(addPlace(place))
+		addPlace(place, currentTime) {
+			dispatch(addPlace(place, currentTime))
 		},
 		setSelectedTab(tab) {
 			dispatch(dashboard.actions.setSelectedTab(tab))
