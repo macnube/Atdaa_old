@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import api from '../../Utils/api'
 import Login from './Login'
+import { Keyboard } from 'react-native'
+import dismissKeyboard from 'dismissKeyboard'
 
 class LoginContainer extends Component {
 
@@ -12,11 +14,35 @@ class LoginContainer extends Component {
 			password: '',
 			isLoading: false,
 			error: '',
+			keyboard: false,
 		}
 	}
 
+	componentWillMount () {
+		const keyboardOpen = () => {
+			console.log("toggling Keyboard");
+			this.setState({
+				keyboard: true
+			})
+		}
+		const keyboardClosed = () => {
+			console.log("toggling Keyboard");
+			this.setState({
+				keyboard: false
+			})
+		}
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardOpen);
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardClosed);
+  }
+
+  componentWillUnmount () {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
 	handleLogIn() {
 		console.log("Handling Log In");
+		dismissKeyboard();
 		this.setState({
 			isLoading: true
 		})
@@ -103,7 +129,8 @@ class LoginContainer extends Component {
 				setPass={(password) => this.setState({password: password})}
 				handleLogIn={this.handleLogIn.bind(this)}
 				onFacebookLogin={this.onFacebookLogin.bind(this)}
-				onFacebookLogout={this.onFacebookLogout.bind(this)} />
+				onFacebookLogout={this.onFacebookLogout.bind(this)}
+				keyboard={this.state.keyboard} />
 		)
 	}
 }

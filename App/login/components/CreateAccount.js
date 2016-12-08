@@ -47,8 +47,8 @@ var styles = StyleSheet.create({
 	},
 	atdaaOrange: {
 		marginTop: 100,
-		width: 116,
-		height: 48,
+		width: 137,
+		height: 56,
 	},
 	buttonContainer: {
 		height: 200,

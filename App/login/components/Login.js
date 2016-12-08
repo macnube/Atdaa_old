@@ -7,7 +7,8 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 	ActivityIndicator,
-	TextInput
+	TextInput,
+	KeyboardAvoidingView
 } from 'react-native'
 
 import * as colors from '../../resources/Colors'
@@ -18,17 +19,18 @@ import SubmitButton from './SubmitButton'
 const Login = (props) => {
 	const {email, password, setEmail, 
 		setPass, isLoading, error, handleLogIn } = props;
-	const buttonContainerHeight = isLoading ? 0 : 320
+	const buttonText = isLoading ? "Signing in..." : "Sign In"
+	const containerPadding = props.keyboard ? 50 : 100
+	const atdaaStyle = props.keyboard ? styles.atdaaOrangeSmall : styles.atdaaOrangeBig
+	const loginTextTop = props.keyboard ? 15 : 0
 	return (
-		<View style={styles.container}>
-			<Image source={{uri: 'atdaaOrangeLarge'}} resizeMode='contain' style={styles.atdaaOrange} />
-			<ActivityIndicator
-					animating={isLoading}
-					color="black"
-					size="large" />
-			<View style={[styles.buttonContainer, {height: buttonContainerHeight}]}>
+		<KeyboardAvoidingView 
+			style={[styles.container, {paddingVertical: containerPadding}]}
+			behavior="padding">
+			<Image source={{uri: 'atdaaOrangeLarge'}} resizeMode='contain' style={atdaaStyle} />
+			<View style={styles.buttonContainer}>
 				<View style={styles.textContainer}>
-					<Text style={styles.plainText}>Login</Text>
+					<Text style={[styles.plainText, {top: loginTextTop}]}>Login</Text>
 				</View>
 				<FacebookButton 
 					onLogin={props.onFacebookLogin}
@@ -49,12 +51,12 @@ const Login = (props) => {
 						placeholder='Password'
 						setText={props.setPass} />
 				<SubmitButton 
-					text="Sign In"
+					text={buttonText}
 					active={props.email && props.password}
 					handlePress={handleLogIn} />
 				<Text style={styles.errorMessage}>{error}</Text>
 			</View>
-		</View>
+		</KeyboardAvoidingView>
 	)
 }
 
@@ -64,9 +66,13 @@ var styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		alignItems: 'center',
+		justifyContent: 'space-around'
 	},
-	atdaaOrange: {
-		marginTop: 100,
+	atdaaOrangeBig: {
+		width: 137,
+		height: 56,
+	},
+	atdaaOrangeSmall: {
 		width: 116,
 		height: 48,
 	},
