@@ -28,3 +28,18 @@ target 'Atdaa' do
   end
 
 end
+source 'https://github.com/CocoaPods/Specs.git'
+#use_frameworks!
+# platform :ios, '8.0'
+
+[
+  'Firebase',
+  'Firebase/Core',
+  'Firebase/Auth',
+  'Firebase/Storage',
+  'Firebase/Database',
+  'Firebase/RemoteConfig',
+  'Firebase/Messaging'
+].each do |lib|
+  pod lib
+end
