@@ -4,14 +4,13 @@ import { connect } from 'react-redux';
 
 import { setUserInfo } from '../actions'
 import api from '../../Utils/api'
+import { getLatestPlaces } from '../../Utils/helpers'
 import dashboard from '../../dashboard';
 import LoginContainer from './LoginContainer'
-import CreateAccount from './CreateAccount'
+import CreateAccountContainer from './CreateAccountContainer'
 import CreateEmailContainer from './CreateEmailContainer'
 
 import Splash from './Splash'
-
-const { DashboardContainer } = dashboard
 
 
 class SplashContainer extends Component {
@@ -19,22 +18,30 @@ class SplashContainer extends Component {
 	toLogIn() {
 		this.props.navigator.push({
 			title: "Login",
-			component: LoginContainer
+			component: LoginContainer,
+			passProps: { 
+				toDashboard: this.toDashboard.bind(this),
+				setUserInfo: this.props.setUserInfo.bind(this)
+			}
+		})
+	}
+
+	toDashboard() {
+		const { DashboardContainer } = dashboard
+		this.props.navigator.push({
+			title: 'Dashboard',
+			component: DashboardContainer
 		})
 	}
 
 	toCreateAccount() {
 		this.props.navigator.push({
 			title: 'Sign Up',
-			component: CreateAccount,
-			passProps: { toCreateEmail: this.toCreateEmail.bind(this)}
-		})
-	}
-
-	toCreateEmail() {
-		this.props.navigator.push({
-			title: 'Sign Up',
-			component: CreateEmailContainer
+			component: CreateAccountContainer,
+			passProps: { 
+				toDashboard: this.toDashboard.bind(this),
+				setUserInfo: this.props.setUserInfo.bind(this)
+			}
 		})
 	}
 
@@ -43,7 +50,25 @@ class SplashContainer extends Component {
 			.then( (userInfo) => {
 				if (userInfo) {
 					console.log("This is user from SplashContainer", userInfo);
-					this._onUser(userInfo);
+					api.getFirebaseUserPlaces(userInfo.id)
+						.then( (snapshot) => {
+							if (snapshot.value) {
+								console.log("Info on server, checking which one is most recent");
+								var places = getLatestPlaces(userInfo.myPlaces, snapshot.value)
+								userInfo = {
+									...userInfo,
+									...places
+								}
+							}
+							this.props.setUserInfo(userInfo);
+							this.toDashboard()
+						})
+						.catch( (error) => {
+							console.log("error getting server info", error);
+							this.props.setUserInfo(userInfo);
+							this.toDashboard()
+						})
+					
 				}
 			})
 			.catch( (error) => {
@@ -60,30 +85,6 @@ class SplashContainer extends Component {
 		go to dashboard
 		*/
 	}
-
-	_onUser(info) {
-		this.props.setUserInfo(info);
-		this.props.navigator.push({
-			title: 'Dashboard',
-			component: DashboardContainer,
-		})
-	}
-	/*
-	componentDidMount() {
-		api.getLocalUserInfo('localInfo')
-		.then( (userData) => {
-			if (userData) {
-				userInfo = api.updateInfo(userData);
-				setUserInfo(userInfo)
-				this.props.navigator.push({
-					title: "SatisFI",
-					component: DashboardContainer,
-				})
-			}
-		})
-	}
-	*/
-
 
 	render() {
 		return (

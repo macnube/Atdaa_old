@@ -30,7 +30,11 @@ const Login = (props) => {
 				<View style={styles.textContainer}>
 					<Text style={styles.plainText}>Login</Text>
 				</View>
-				<FacebookButton handlePress={() => console.log("facebook button")}/>
+				<FacebookButton 
+					onLogin={props.onFacebookLogin}
+					onLogout={props.onFacebookLogout} 
+					user={null}
+					isLoading={props.isLoading}/>
 				<View style={styles.textContainer}>
 					<Text style={styles.plainText}>OR</Text>
 				</View>

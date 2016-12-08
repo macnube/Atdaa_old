@@ -23,12 +23,17 @@ const CreateAccount = (props) => {
 				<View style={styles.textContainer}>
 					<Text style={styles.plainText}>Create Account</Text>
 				</View>
-				<FacebookButton handlePress={() => console.log("Facebook button")}/>
+				<FacebookButton 
+					onLogin={props.onFacebookCreateAccount}
+					onLogout={props.onFacebookLogout} 
+					user={null}
+					isLoading={props.isLoading}/>
 				<View style={styles.textContainer}>
 					<Text style={styles.plainText}>OR</Text>
 				</View>
 				<EmailButton handlePress={() => props.toCreateEmail()}/>
 			</View>
+			<Text style={styles.errorMessage}>{props.error}</Text>
 		</View>
 	)
 }
@@ -62,5 +67,10 @@ var styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
+	errorMessage: {
+		color: 'red',
+		fontSize: 16,
+		marginTop: 20
+	}
 
 })

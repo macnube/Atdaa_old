@@ -73,6 +73,12 @@ export const getPrimaryIcon = (placeTags) => {
 
 //Place helpers
 
+export const getLatestPlaces = (first, second) => {
+	if (first.lastUpdated > second.lastUpdated) {
+		return first
+	} else return second
+}
+
 export const getDistanceFromLatLonInKm = (lat1,lon1,lat2,lon2) => {
   var R = 6371; // Radius of the earth in km
   var dLat = deg2rad(lat2-lat1);  // deg2rad below

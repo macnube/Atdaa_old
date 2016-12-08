@@ -1,12 +1,8 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux';
-
-import { setUserInfo } from '../actions'
 import api from '../../Utils/api'
-import dashboard from '../../dashboard'
 import CreateEmail from './CreateEmail'
-
-const { DashboardContainer } = dashboard
+import { Keyboard } from 'react-native'
+import dismissKeyboard from 'dismissKeyboard'
 
 class CreateEmailContainer extends Component {
 
@@ -17,11 +13,35 @@ class CreateEmailContainer extends Component {
 			password: '',
 			isLoading: false,
 			error: '',
+			keyboard: false,
 		}
 	}
 
+	componentWillMount () {
+		const keyboardOpen = () => {
+			console.log("toggling Keyboard");
+			this.setState({
+				keyboard: true
+			})
+		}
+		const keyboardClosed = () => {
+			console.log("toggling Keyboard");
+			this.setState({
+				keyboard: false
+			})
+		}
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardOpen);
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardClosed);
+  }
+
+  componentWillUnmount () {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
 	handleCreateUser() {
 		console.log("Handling Create User");
+		dismissKeyboard();
 		this.setState({
 			isLoading: true
 		})
@@ -29,25 +49,20 @@ class CreateEmailContainer extends Component {
 			.then((data) => {
 				console.log('data from signIn', data);
 				const userInfo = {
-					lastUpdated: new Date().getTime() / 1000,
 					id: data.uid,
 					email: data.email,
-					myPlaces: null,
-					toolbar: null
 				};
 				api.setLocalUserInfo(userInfo)
 				this.props.setUserInfo(userInfo);
 				this.setState({
 					isLoading: false
 				});
-				this.props.navigator.push({
-					title: "SatisFI",
-					component: DashboardContainer
-				})
+				this.props.toDashboard();
 			})
 			.catch((error) => {
+				console.log("error frm CreateEmail", error);
 				this.setState({
-					error: error.message,
+					error: error.description,
 					isLoading: false
 				})
 			})
@@ -62,9 +77,10 @@ class CreateEmailContainer extends Component {
 				isLoading={this.state.isLoading}
 				setEmail={(email) => this.setState({email: email})}
 				setPass={(password) => this.setState({password: password})}
-				handleCreateUser={this.handleCreateUser.bind(this)} />
+				handleCreateUser={this.handleCreateUser.bind(this)}
+				keyboard={this.state.keyboard} />
 		)
 	}
 }
 
-export default connect(null, { setUserInfo })(CreateEmailContainer);
+export default CreateEmailContainer

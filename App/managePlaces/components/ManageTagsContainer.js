@@ -6,6 +6,7 @@ import {
 } from 'react-native'
 
 import dashboard from '../../dashboard';
+import login from '../../login'
 import { addPlace } from '../actions'
 import ManageTags from './ManageTags'
 import api from '../../Utils/api'
@@ -38,7 +39,7 @@ class ManageTagsContainer extends Component {
 			tags: this.state.selectedTags
 		}
 		const currentTime = new Date().getTime() / 1000
-		api.updateLocalMyPlaces(this.props.myPlaces, newPlace, currentTime)
+		api.updateMyPlaces(this.props.userId, this.props.myPlaces, newPlace, currentTime)
 		this.props.addPlace(newPlace, currentTime)
 	}
 
@@ -109,7 +110,8 @@ const mapStateToProps = (state) => {
 	return {
 		layoutInfo: dashboard.selectors.getLayoutInfo(state.dashboard),
 		placeInfo: state.placeInfo,
-		myPlaces: state.myPlaces
+		myPlaces: state.myPlaces,
+		userId: login.selectors.getUserId(state.user)
 	}
 }
 

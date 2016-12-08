@@ -37,7 +37,8 @@ const Dashboard = (props) => {
 				layoutInfo={layoutInfo}
 				selectedTab={selectedTab}
 				setSelectedTab={setSelectedTab}
-				isVisible={props.navVisible} />
+				isVisible={props.navVisible}
+				handleLogout={props.handleLogout} />
 			<Main selectedTab={selectedTab} placeInfo={props.placeInfo}/>
 			<ToolbarContainer />
 			{renderIcon()}

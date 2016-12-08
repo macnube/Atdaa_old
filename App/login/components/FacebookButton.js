@@ -7,67 +7,99 @@ import {
 	Text,
 	Image,
 	StyleSheet,
+	View
 } from 'react-native'
 
-
 import api from '../../Utils/api'
-/*
-const FacebookButton = (props) => {
-	return (
-		<TouchableOpacity 
-			onPress={() => props.handlePress()}
-			style={styles.container}>
-			<Image source={{uri: 'facebook'}} resizeMode='contain' style={styles.facebook} />
-			<Text style={styles.text}>Facebook</Text>
-		</TouchableOpacity>
-	)
-}
-
-export default FacebookButton;
-
-*/
 
 class FacebookButton extends Component {
-  render() {
-    return (
-      <FBLogin 
-        onLogin={function(data){
-          console.log("Logged in!");
-          console.log(data);
-          let token = data.credentials.token
-          api.signInFacebook(token) // facebook need only access token.
-            .then((user)=>{
-              console.log(user)
-            })
-            .catch( (error) => {
-            	console.log("error in FB Login", error)
-            })
-        }}
-      />
-    );
-  }
-};
+
+	constructor(props) {
+		super(props);
+		console.log("props going into FacebookButton", props);
+	}
+
+	handleLogin() {
+		FBLoginManager.login( (error, data) => {
+      if (!error) {
+      	console.log("Facebook login successful");
+      	this.props.onLogin(data);
+      } else {
+        console.log(error, data);
+      }
+    });
+	}
+
+	handleLogout() {
+    FBLoginManager.logout( (error, data) => {
+      if (!error) {
+      	this.props.onLogout();
+      } else {
+        console.log(error, data);
+      }
+    });
+	}
+
+	handlePress() {
+		this.props.user
+      ? this.handleLogout()
+      : this.handleLogin();
+	}
+
+	componentWillMount() {
+		var _this = this;
+    FBLoginManager.logout( (error, data) => {
+      if (!error) {
+      	this.props.onLogout();
+      } else {
+        console.log(error, data);
+      }
+    });
+	}
+
+	render() {
+		var text = this.props.isLoading ? "Logging in..." : "Facebook";
+		return (
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={this.handlePress.bind(this)}>
+        <Image style={styles.FBLogo} source={{uri: 'facebook'}} />
+        <Text style={[styles.FBLoginButtonText, this.props.user ? styles.FBLoginButtonTextLoggedIn : styles.FBLoginButtonTextLoggedOut]}
+          numberOfLines={1}>{text}</Text>
+      </TouchableOpacity>
+		)
+	}
+
+}
 
 export default FacebookButton
 
-var styles = StyleSheet.create({
-	container: {
-		flexDirection: 'row',
-		backgroundColor: 'rgba(57,86,155,0.9)',
-		borderRadius: 5,
-		height: 44,
-		width: 219,
-		alignItems: 'center',
-		justifyContent: 'space-around',
-		paddingHorizontal: 50,
-	},
-	facebook: {
-		height: 16,
-		width: 16,
-	},
-	text: {
-		fontSize: 14,
-		color: 'white',
-	}
 
-})
+var styles = StyleSheet.create({
+  buttonContainer: {
+  	height: 44,
+  	width: 219,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: 'rgb(66,93,174)',
+    borderRadius: 5,
+    paddingHorizontal: 30,
+  },
+  FBLoginButtonText: {
+    color: 'white',
+    fontWeight: '600',
+    fontFamily: 'Helvetica neue',
+    fontSize: 14.2,
+  },
+  FBLoginButtonTextLoggedIn: {
+    marginLeft: 5,
+  },
+  FBLoginButtonTextLoggedOut: {
+    marginLeft: 18,
+  },
+  FBLogo: {
+    height: 16,
+    width: 16,
+  },
+});

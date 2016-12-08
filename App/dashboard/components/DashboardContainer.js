@@ -7,9 +7,9 @@ import iconSearch from '../../iconSearch'
 import managePlaces from '../../managePlaces'
 import searchButton from '../../searchButton'
 import placeSearch from '../../placeSearch'
+import login from '../../login'
 
 import Dashboard from './Dashboard'
-
 
 import api from '../../Utils/api'
 import { getLayout } from '../../Utils/helpers';
@@ -29,6 +29,16 @@ class DashboardContainer extends Component {
 		this.props.setLayout(getLayout());
 	}
 
+	handleLogout() {
+		const { SplashContainer } = login
+		api.signOut();
+		api.deleteLocalUserInfo();
+		this.props.navigator.push({
+			title: 'Splash',
+			component: SplashContainer,
+		})
+	}
+
 	navVisible() {
 		const excludedTabs = ['iconSearch', 'manageTags', 'placeInfo'];
 		return excludedTabs.indexOf(this.props.dashboard.selectedTab) === -1
@@ -40,6 +50,7 @@ class DashboardContainer extends Component {
 			<Dashboard
 				navVisible={this.navVisible()}
 				handleLayout={this.handleLayout.bind(this)} 
+				handleLogout={this.handleLogout.bind(this)}
 				shouldBlur={shouldBlur}
 				{...this.props} />
 		)

@@ -15,7 +15,7 @@ import NavBarIcon from './NavBarIcon';
 import * as colors from '../../resources/Colors'
 
 
-const NavBar = ({ selectedTab, setSelectedTab, layoutInfo, isVisible }) => {
+const NavBar = ({ selectedTab, setSelectedTab, layoutInfo, isVisible, handleLogout }) => {
 	const height = isVisible ? 66 : 0;
 	return (
 		<View
@@ -28,7 +28,7 @@ const NavBar = ({ selectedTab, setSelectedTab, layoutInfo, isVisible }) => {
 			<NavBarIcon
 				imageURI="listView"
 				selected={selectedTab === "iconSearch"}
-				onPress={ () => console.log("Doing nothing")} />
+				onPress={ () => handleLogout()} />
 		</View>
 	)
 }

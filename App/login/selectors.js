@@ -1,5 +1,5 @@
 export const getUserId = (state) => {
-	return state.userId
+	return state.id
 }
 
 export const getUserInfo = (state) => {
